@@ -1,19 +1,19 @@
-var states = Object.freeze({
-    SplashScreen: 0,
-    GameScreen: 1,
+var estado = Object.freeze({
+    iniciarjogo: 0,
+    ecrajogo: 1,
     ScoreScreen: 2
 });
 
-var currentstate;
+var estadoAtual;
 
 var gravidade = 0.25;
 var velocidade = 0;
 var posicao = 180;
 var rotacao = 0;
 var salto = -4.6;
-var flyArea = $("#area-de-jogo").height();
+var areajogo = $("#area-de-jogo").height();
 
-var score = 0;
+var pontos = 0;
 var pontuacaomelhor = 0;
 
 var canosheight = 90;
@@ -25,38 +25,32 @@ var replayclickable = false;
 
 
 //loops
-var loopGameloop;
-var loopPipeloop;
+var loopdojogo;
+var loopdoscanos;
 
 $(document).ready(function () {
 
-    if (window.location.search == "?easy")
-        canosheight = 200;
-
-
-
-    //start with the splash screen
-    showSplash();
+    mostrarjogo();
 });
 
 
 
 
-function showSplash() {
-    currentstate = states.SplashScreen;
+function mostrarjogo() {
+    estadoAtual = estado.iniciarjogo;
 
     //set the defaults (again)
     velocidade = 0;
     posicao = 180;
     rotacao = 0;
-    score = 0;
+    pontos = 0;
 
     //update the jogador in preparation for the proximo game
     $("#jogador").css({
         y: 0,
         x: 0
     });
-    updatePlayer($("#jogador"));
+    actualizarjogador($("#jogador"));
 
 
 
@@ -75,29 +69,29 @@ function showSplash() {
 
 }
 
-function startGame() {
-    currentstate = states.GameScreen;
+function iniciarjogo() {
+    estadoAtual = estado.ecrajogo;
 
     //fade out the splash
     $("#splash").stop();
 
 $("#splash").css("opacity","0");
 
-    //update the big score
-    setBigScore();
+    //update the big pontos
+    setmaiorpontuacao();
 
 
 
     //start up our loops
     var updaterate = 1000.0 / 60.0; //60 times a second
-    loopGameloop = setInterval(gameloop, updaterate);
-    loopPipeloop = setInterval(updatePipes, 1400);
+    loopdojogo = setInterval(jogoloop, updaterate);
+    loopdoscanos = setInterval(refescarcanos, 1400);
 
     //salto from the start!
-    jogadorJump();
+    jogadorsaltos();
 }
 
-function updatePlayer(jogador) {
+function actualizarjogador(jogador) {
     //rotacao
     rotacao = Math.min((velocidade / 10) * 90, 90);
 
@@ -108,7 +102,7 @@ function updatePlayer(jogador) {
     });
 }
 
-function gameloop() {
+function jogoloop() {
     var jogador = $("#jogador");
 
     //update the jogador speed/posicao
@@ -116,7 +110,7 @@ function gameloop() {
     posicao += velocidade;
 
     //update the jogador
-    updatePlayer(jogador);
+    actualizarjogador(jogador);
 
     //create the bounding box
     var box = document.getElementById('jogador').getBoundingClientRect();
@@ -134,7 +128,7 @@ function gameloop() {
 
     //did we hit the ground?
     if (box.bottom >= $("#imagem-baixo").offset().top) {
-        jogadorDead();
+        jogadormorto();
         return;
     }
 
@@ -154,19 +148,19 @@ function gameloop() {
     var canostop = proximocanoscima.offset().top + proximocanoscima.height();
     var canosEsquerda = proximocanoscima.offset().left - 2; // for some reason it starts at the inner pipes offset, not the outer pipes.
     var canosDireita = canosEsquerda + canoswidth;
-    var canosbottom = canostop + canosheight;
+    var canosbaixo = canostop + canosheight;
 
 
 
     //have we gotten inside the pipe yet?
     if (boxright > canosEsquerda) {
         //we're within the canos, have we passed between upper and lower canoss?
-        if (boxtop > canostop && boxbottom < canosbottom) {
+        if (boxtop > canostop && boxbottom < canosbaixo) {
             //yeah! we're within bounds
 
         } else {
             //no! we touched the canos
-            jogadorDead();
+            jogadormorto();
             return;
         }
     }
@@ -177,40 +171,40 @@ function gameloop() {
         //yes, remove it
         canoss.splice(0, 1);
 
-        //and score a point
-        jogadorScore();
+        //and pontos a point
+        jogadorpontos();
     }
 }
 
 
 //Handle mouse down OR touch start
 if ("ontouchstart" in window)
-    $(document).on("touchstart", screenClick);
+    $(document).on("touchstart", clicknoecra);
 else
-    $(document).on("mousedown", screenClick);
+    $(document).on("mousedown", clicknoecra);
 
-function screenClick() {
-    if (currentstate == states.GameScreen) {
-        jogadorJump();
-    } else if (currentstate == states.SplashScreen) {
-        startGame();
+function clicknoecra() {
+    if (estadoAtual == estado.ecrajogo) {
+        jogadorsaltos();
+    } else if (estadoAtual == estado.iniciarjogo) {
+        iniciarjogo();
     }
 }
 
-function jogadorJump() {
+function jogadorsaltos() {
     velocidade = salto;
     //play salto sound
 
 }
 
-function setBigScore(erase) {
+function setmaiorpontuacao(erase) {
     var elemscore = $("#maiorpontuacao");
     elemscore.empty();
 
     if (erase)
         return;
 
-    var digits = score.toString().split('');
+    var digits = pontos.toString().split('');
     for (var i = 0; i < digits.length; i++)
         elemscore.append("<img src='assets/font_big_" + digits[i] + ".png' alt='" + digits[i] + "'>");
 }
@@ -219,7 +213,7 @@ function setSmallScore() {
     var elemscore = $("#pontuacao");
     elemscore.empty();
 
-    var digits = score.toString().split('');
+    var digits = pontos.toString().split('');
     for (var i = 0; i < digits.length; i++)
         elemscore.append("<img src='assets/font_small_" + digits[i] + ".png' alt='" + digits[i] + "'>");
 }
@@ -233,77 +227,77 @@ function setHighScore() {
         elemscore.append("<img src='assets/font_small_" + digits[i] + ".png' alt='" + digits[i] + "'>");
 }
 
-function setMedal() {
+function setmedalhas() {
     var elemmedal = $("#medalhas");
     elemmedal.empty();
 
-    if (score < 2)
-        //signal that no medal has been won
+    if (pontos < 2)
+        //signal that no medalhas has been won
         return false;
 
-    if (score >= 2)
-        medal = "bronze";
-    if (score >= 5)
-        medal = "silver";
-    if (score >= 30)
-        medal = "gold";
-    if (score >= 40)
-        medal = "platinum";
+    if (pontos >= 2)
+        medalhas = "bronze";
+    if (pontos >= 5)
+        medalhas = "silver";
+    if (pontos >= 30)
+        medalhas = "gold";
+    if (pontos >= 40)
+        medalhas = "platinum";
 
-    elemmedal.append('<img src="assets/medal_' + medal + '.png" alt="' + medal + '">');
+    elemmedal.append('<img src="assets/medal_' + medalhas + '.png" alt="' + medalhas + '">');
 
-    //signal that a medal has been won
+    //signal that a medalhas has been won
     return true;
 }
 
-function jogadorDead() {
+function jogadormorto() {
     //stop animating everything!
     $(".efeito").css('animation-play-state', 'paused');
     $(".efeito").css('-webkit-animation-play-state', 'paused');
 
     //drop the bird to the floor
-    var jogadorbottom = $("#jogador").position().top + $("#jogador").width(); //we use width because he'll be rotated 90 deg
-    var floor = flyArea;
-    var movey = Math.max(0, floor - jogadorbottom);
+    var jogadorchao = $("#jogador").position().top + $("#jogador").width(); //we use width because he'll be rotated 90 deg
+    var floor = areajogo;
+    var movey = Math.max(0, floor - jogadorchao);
     $("#jogador").transition({
         y: movey + 'px',
         rotate: 90
     }, 1000, 'easeInOutCubic');
 
-    //it's time to change states. as of now we're considered ScoreScreen to disable left click/flying
-    currentstate = states.ScoreScreen;
+    //it's time to change estado. as of now we're considered ScoreScreen to disable left click/flying
+    estadoAtual = estado.ScoreScreen;
 
-    //destroy our gameloops
-    clearInterval(loopGameloop);
-    clearInterval(loopPipeloop);
-    loopGameloop = null;
-    loopPipeloop = null;
+    //destroy our jogoloops
+    clearInterval(loopdojogo);
+    clearInterval(loopdoscanos);
+    loopdojogo = null;
+    loopdoscanos = null;
 
 
-    //skip right to showing score
-    showScore();
+    //skip right to showing pontos
+    mostrarpontos();
 
 
 }
 
-function showScore() {
+function mostrarpontos() {
     //unhide us
     $("#quadropontos").css("display", "block");
 
-    //remove the big score
-    setBigScore(true);
+    //remove the big pontos
+    setmaiorpontuacao(true);
 
-    //have they beaten their high score?
-    if (score > pontuacaomelhor) {
+    //have they beaten their high pontos?
+    if (pontos > pontuacaomelhor) {
         //yeah!
-        pontuacaomelhor = score;
+        pontuacaomelhor = pontos;
         //save it!
     }
 
-    //update the scoreboard
+    //update the pontosboard
     setSmallScore();
     setHighScore();
-    var wonmedal = setMedal();
+    var wonmedal = setmedalhas();
 
     //SWOOSH!
 
@@ -364,27 +358,27 @@ $("#repetir").click(function () {
         $("#quadropontos").css("display", "none");
 
         //start the game over!
-        showSplash();
+        mostrarjogo();
     });
 });
 
-function jogadorScore() {
-    score += 1;
+function jogadorpontos() {
+    pontos += 1;
 
-    setBigScore();
+    setmaiorpontuacao();
 }
 
-function updatePipes() {
+function refescarcanos() {
     //Do any canoss need removal?
     $(".canos").filter(function () {
         return $(this).position().left <= -100;
     }).remove()
 
-    //add a new canos (top height + bottom height  + canosheight == flyArea) and put it in our tracker
+    //add a new canos (top height + bottom height  + canosheight == areajogo) and put it in our tracker
     var padding = 80;
-    var constraint = flyArea - canosheight - (padding * 2); //double padding (for top and bottom)
+    var constraint = areajogo - canosheight - (padding * 2); //double padding (for top and bottom)
     var topheight = Math.floor((Math.random() * constraint) + padding); //add lower padding
-    var bottomheight = (flyArea - canosheight) - topheight;
+    var bottomheight = (areajogo - canosheight) - topheight;
     var newcanos = $('<div class="canos efeito"><div class="canos_cima" style="height: ' + topheight + 'px;"></div><div class="canos_baixo" style="height: ' + bottomheight + 'px;"></div></div>');
     $("#area-de-jogo").append(newcanos);
     canoss.push(newcanos);
