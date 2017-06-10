@@ -1,0 +1,391 @@
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    font-family: monospace;
+    font-size: 12px;
+    color: #fff;
+}
+
+#area-jogo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 525px;
+}
+
+
+/*
+Screen - Game
+*/
+
+#jogo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#ceu {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 80%;
+    background-image: url('../assets/sky.png');
+    background-repeat: repeat-x;
+    background-position: 0px 100%;
+    background-color: #4ec0ca;
+    -webkit-animation: efeitoceu 7s linear infinite;
+    animation: efeitoceu 7s linear infinite;
+}
+
+#area-de-jogo {
+    position: absolute;
+    bottom: 0;
+    height: 420px;
+    width: 100%;
+}
+
+#tijolo-de-cima {
+    position: absolute;
+    top: -16px;
+    height: 16px;
+    width: 100%;
+    background-image: url('../assets/ceiling.png');
+    background-repeat: repeat-x;
+    -webkit-animation: efeitotijolo 481ms linear infinite;
+    animation: efeitotijolo 481ms linear infinite;
+}
+
+#imagem-baixo {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    background-image: url('../assets/land.png');
+    background-repeat: repeat-x;
+    background-position: 0px 0px;
+    background-color: #ded895;
+    -webkit-animation: efeitochao 2516ms linear infinite;
+    animation: efeitochao 2516ms linear infinite;
+}
+
+#maiorpontuacao {
+    position: absolute;
+    top: 20px;
+    left: 150px;
+    z-index: 100;
+}
+
+#maiorpontuacao img {
+    display: inline-block;
+    padding: 1px;
+}
+
+#splash {
+    position: absolute;
+    opacity: 0;
+    top: 75px;
+    left: 65px;
+    width: 188px;
+    height: 170px;
+    background-image: url('../assets/splash.png');
+    background-repeat: no-repeat;
+}
+
+#quadropontos {
+    position: absolute;
+    display: none;
+    opacity: 0;
+    top: 64px;
+    left: 43px;
+    width: 236px;
+    height: 280px;
+    background-image: url('../assets/scoreboard.png');
+    background-repeat: no-repeat;
+    z-index: 1000;
+}
+
+#medalhas {
+    position: absolute;
+    opacity: 0;
+    top: 114px;
+    left: 32px;
+    width: 44px;
+    height: 44px;
+}
+
+#pontuacao {
+    position: absolute;
+    top: 105px;
+    left: 107px;
+    width: 104px;
+    height: 14px;
+    text-align: right;
+}
+
+#pontuacao img {
+    padding-left: 2px;
+}
+
+#pontuacaomelhor {
+    position: absolute;
+    top: 147px;
+    left: 107px;
+    width: 104px;
+    height: 14px;
+    text-align: right;
+}
+
+#pontuacaomelhor img {
+    padding-left: 2px;
+}
+
+#repetir {
+    position: absolute;
+    opacity: 0;
+    top: 205px;
+    left: 61px;
+    height: 115px;
+    width: 70px;
+    cursor: pointer;
+}
+
+#jogador {
+    left: 60px;
+    top: 200px;
+}
+
+.passaro {
+    position: absolute;
+    width: 34px;
+    height: 24px;
+    background-image: url('../assets/bird.png');
+    -webkit-animation: efeitopassaro 300ms steps(4) infinite;
+    animation: efeitopassaro 300ms steps(4) infinite;
+}
+
+.canos {
+    position: absolute;
+    left: -100px;
+    width: 52px;
+    height: 100%;
+    z-index: 10;
+    -webkit-animation: efeitocano 7500ms linear;
+    animation: efeitocano 7500ms linear;
+}
+
+.canos_cima {
+    position: absolute;
+    top: 0;
+    width: 52px;
+    background-image: url('../assets/pipe.png');
+    background-repeat: repeat-y;
+    background-position: center;
+}
+
+.canos_cima:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 52px;
+    height: 26px;
+    background-image: url('../assets/pipe-down.png');
+}
+
+.canos_baixo {
+    position: absolute;
+    bottom: 0;
+    width: 52px;
+    background-image: url('../assets/pipe.png');
+    background-repeat: repeat-y;
+    background-position: center;
+}
+
+.canos_baixo:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 26px;
+    background-image: url('../assets/pipe-up.png');
+}
+
+@-webkit-keyframes efeitochao {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -335px 0px;
+    }
+}
+
+@-moz-keyframes efeitochao {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -335px 0px;
+    }
+}
+
+@-o-keyframes efeitochao {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -335px 0px;
+    }
+}
+
+@keyframes efeitochao {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -335px 0px;
+    }
+}
+
+@-webkit-keyframes efeitoceu {
+    0% {
+        background-position: 0px 100%;
+    }
+    100% {
+        background-position: -275px 100%;
+    }
+}
+
+@-moz-keyframes efeitoceu {
+    0% {
+        background-position: 0px 100%;
+    }
+    100% {
+        background-position: -275px 100%;
+    }
+}
+
+@-o-keyframes efeitoceu {
+    0% {
+        background-position: 0px 100%;
+    }
+    100% {
+        background-position: -275px 100%;
+    }
+}
+
+@keyframes efeitoceu {
+    0% {
+        background-position: 0px 100%;
+    }
+    100% {
+        background-position: -275px 100%;
+    }
+}
+
+@-webkit-keyframes efeitopassaro {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: 0px -96px;
+    }
+}
+
+@-moz-keyframes efeitopassaro {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: 0px -96px;
+    }
+}
+
+@-o-keyframes efeitopassaro {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: 0px -96px;
+    }
+}
+
+@keyframes efeitopassaro {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: 0px -96px;
+    }
+}
+
+@-webkit-keyframes efeitocano {
+    0% {
+        left: 900px;
+    }
+    100% {
+        left: -100px;
+    }
+}
+
+@-moz-keyframes efeitocano {
+    0% {
+        left: 900px;
+    }
+    100% {
+        left: -100px;
+    }
+}
+
+@-o-keyframes efeitocano {
+    0% {
+        left: 900px;
+    }
+    100% {
+        left: -100px;
+    }
+}
+
+@keyframes efeitocano {
+    0% {
+        left: 900px;
+    }
+    100% {
+        left: -100px;
+    }
+}
+
+@-webkit-keyframes efeitotijolo {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -63px 0px;
+    }
+}
+
+@-moz-keyframes efeitotijolo {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -63px 0px;
+    }
+}
+
+@-o-keyframes efeitotijolo {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -63px 0px;
+    }
+}
+
+@keyframes efeitotijolo {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: -63px 0px;
+    }
+}
