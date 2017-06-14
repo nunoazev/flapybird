@@ -1,8 +1,5 @@
-var estado = Object.freeze({
-    iniciarjogo: 0,
-    ecrajogo: 1,
-    ScoreScreen: 2
-});
+
+
 
 var estadoAtual;
 
@@ -27,6 +24,13 @@ var replayclickable = false;
 //loops
 var loopdojogo;
 var loopdoscanos;
+
+
+var estado = Object.freeze({
+    iniciarjogo: 0,
+    ecrajogo: 1,
+    ScoreScreen: 2
+});
 
 $(document).ready(function () {
 
@@ -83,11 +87,11 @@ $("#splash").css("opacity","0");
 
 
     //start up our loops
-    var updaterate = 1000.0 / 60.0; //60 times a second
+    var updaterate = 17; //gravidade
     loopdojogo = setInterval(jogoloop, updaterate);
     loopdoscanos = setInterval(refescarcanos, 1400);
 
-    //salto from the start!
+    //salto depois de comecar
     jogadorsaltos();
 }
 
@@ -95,7 +99,7 @@ function actualizarjogador(jogador) {
     //rotacao
     rotacao = Math.min((velocidade / 10) * 90, 90);
 
-    //apply rotacao and posicao
+    //aplicar rotacao e posicao
     $(jogador).css({
         rotate: rotacao,
         top: posicao
@@ -114,11 +118,11 @@ function jogoloop() {
 
     //create the bounding box
     var box = document.getElementById('jogador').getBoundingClientRect();
-    var origwidth = 34.0;
-    var origheight = 24.0;
+    var larguraOrigem = 34.0;
+    var alturaOrigem = 24.0;
 
-    var boxwidth = origwidth - (Math.sin(Math.abs(rotacao) / 90) * 8);
-    var boxheight = (origheight + box.height) / 2;
+    var boxwidth = larguraOrigem - (Math.sin(Math.abs(rotacao) / 90) * 8);
+    var boxheight = (alturaOrigem + box.height) / 2;
     var boxleft = ((box.width - boxwidth) / 2) + box.left;
     var boxtop = ((box.height - boxheight) / 2) + box.top;
     var boxright = boxleft + boxwidth;
@@ -132,7 +136,7 @@ function jogoloop() {
         return;
     }
 
-    //have they tried to escape through the tijolo? :o
+    //bater na tijolo de cima?
     var tijolo = $("#tijolo-de-cima");
     if (boxtop <= (tijolo.offset().top + tijolo.height()))
         posicao = 0;
@@ -152,14 +156,14 @@ function jogoloop() {
 
 
 
-    //have we gotten inside the pipe yet?
+    //dentro do cano?
     if (boxright > canosEsquerda) {
-        //we're within the canos, have we passed between upper and lower canoss?
+        //passou os canos? soma ponto
         if (boxtop > canostop && boxbottom < canosbaixo) {
             //yeah! we're within bounds
 
         } else {
-            //no! we touched the canos
+            //morreu
             jogadormorto();
             return;
         }
@@ -193,7 +197,6 @@ function clicknoecra() {
 
 function jogadorsaltos() {
     velocidade = salto;
-    //play salto sound
 
 }
 
@@ -221,6 +224,8 @@ function setSmallScore() {
 function setHighScore() {
     var elemscore = $("#pontuacaomelhor");
     elemscore.empty();
+
+
 
     var digits = pontuacaomelhor.toString().split('');
     for (var i = 0; i < digits.length; i++)
@@ -255,10 +260,10 @@ function jogadormorto() {
     $(".efeito").css('animation-play-state', 'paused');
     $(".efeito").css('-webkit-animation-play-state', 'paused');
 
-    //drop the bird to the floor
+    //cair no chão
     var jogadorchao = $("#jogador").position().top + $("#jogador").width(); //we use width because he'll be rotated 90 deg
-    var floor = areajogo;
-    var movey = Math.max(0, floor - jogadorchao);
+    var chao = areajogo;
+    var movey = Math.max(0, chao - jogadorchao);
     $("#jogador").transition({
         y: movey + 'px',
         rotate: 90
@@ -357,7 +362,7 @@ $("#repetir").click(function () {
         //when that's done, display us back to nothing
         $("#quadropontos").css("display", "none");
 
-        //start the game over!
+        //mostrar inicio do jogo
         mostrarjogo();
     });
 });
