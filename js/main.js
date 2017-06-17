@@ -1,23 +1,6 @@
-
-
-
-var estadoAtual;
-var gravidade = 0.25;
-var velocidade = 0;
-var posicao = 180;
-var rotacao = 0;
-var salto = -4.6;
-var areajogo = $("#area-de-jogo").height();
-var pontos = 0;
-var pontuacaomelhor = 0;
-var canosheight = 90;
-var canoswidth = 52;
-var canoss = new Array();
 var replayclickable = false;
 
-//loops
-var loopdojogo;
-var loopdoscanos;
+
 
 
 var estado = Object.freeze({
@@ -59,16 +42,11 @@ $("#repetir").click(function () {
 
 
 
-
-//click
-
-
 //Handle mouse down OR touch start
 if ("ontouchstart" in window)
     $(document).on("touchstart", clicknoecra);
 else
     $(document).on("mousedown", clicknoecra);
-
 
 
 
@@ -79,7 +57,3 @@ function clicknoecra() {
         jogojs.iniciarjogo();
     }
 }
-
-
-
-
