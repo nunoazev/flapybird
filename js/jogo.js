@@ -43,7 +43,7 @@ var jogojs ={
 $("#splash").css("opacity","0");
 
     //update the big pontos
-    setmaiorpontuacao();
+    pontosjs.setmaiorpontuacao();
 
 
 

@@ -18,7 +18,7 @@ var jogadorjs ={
     jogadorpontos: function () {
     pontos += 1;
 
-    setmaiorpontuacao();
+    pontosjs.setmaiorpontuacao();
 },
 
     jogadormorto: function () {
@@ -46,7 +46,7 @@ var jogadorjs ={
 
 
     //skip right to showing pontos
-    mostrarpontos();
+    pontosjs.mostrarpontos();
 
 
 }
