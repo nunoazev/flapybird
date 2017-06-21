@@ -5,7 +5,7 @@ var medalhasjs = {
         elemmedal.empty();
 
         if (pontos < 2)
-            //signal that no medalhas has been won
+            //deteta a medalha que ganha
             return false;
 
         if (pontos >= 2)
@@ -19,7 +19,7 @@ var medalhasjs = {
 
         elemmedal.append('<img src="assets/medal_' + medalhas + '.png" alt="' + medalhas + '">');
 
-        //signal that a medalhas has been won
+        //retorna
         return true;
     }
 

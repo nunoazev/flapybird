@@ -23,7 +23,7 @@ var jogadorjs = {
         pontosjs.setmaiorpontuacao();
     },
     jogadormorto: function () {
-        //stop animating everything!
+// para as animações
         $(".efeito").css('animation-play-state', 'paused');
         $(".efeito").css('-webkit-animation-play-state', 'paused');
 
@@ -36,17 +36,17 @@ var jogadorjs = {
             rotate: 90
         }, 1000, 'easeInOutCubic');
 
-        //it's time to change estado. as of now we're considered ScoreScreen to disable left click/flying
+ // sempre que o estado é igual ao do passar cano ele adiciona ponto
         estadoAtual = estado.ScoreScreen;
 
-        //destroy our jogoloops
+//para com os loops e jogo
         clearInterval(loopdojogo);
         clearInterval(loopdoscanos);
         loopdojogo = null;
         loopdoscanos = null;
 
 
-        //skip right to showing pontos
+// mostra pontos
         pontosjs.mostrarpontos();
 
 

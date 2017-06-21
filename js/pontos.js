@@ -6,48 +6,47 @@ var pontosjs = {
 
     mostrarpontos: function () {
 
-        //unhide us
+//quadro dos pontos
         $("#quadropontos").css("display", "block");
 
-        //remove the big pontos
+
         pontosjs.setmaiorpontuacao(true);
 
-        //have they beaten their high pontos?
+// compara os quadros dos pontos
         if (pontos > pontuacaomelhor) {
-            //yeah!
             pontuacaomelhor = pontos;
-            //save it!
+//grava
         }
 
-        //update the pontosboard
+// actualiza pontuação
         pontosjs.setpontuacaomenor();
         pontosjs.setmelhorpontuacao();
         var wonmedal = medalhasjs.setmedalhas();
 
-        //SWOOSH!
 
 
-        //show the quadropontos
+        //mostra quadro dos pontos
         $("#quadropontos").css({
             y: '40px',
             opacity: 0
-        }); //move it down so we can slide it up
+        });
         $("#repetir").css({
             y: '40px',
             opacity: 0
         });
+        // faz efeito de trancisao
         $("#quadropontos").transition({
             y: '0px',
             opacity: 1
         }, 600, 'ease', function () {
-            //When the animation is done, animate in the replay button and SWOOSH!
+            //quando a animação acaba aparece o botao de replay
 
             $("#repetir").transition({
                 y: '0px',
                 opacity: 1
             }, 600, 'ease');
 
-            //also animate in the MEDAL! WOO!
+            //medalhas
             if (wonmedal) {
                 $("#medalhas").css({
                     scale: 2,
@@ -61,7 +60,7 @@ var pontosjs = {
             }
         });
 
-        //make the replay button clickable
+        // butao de replay com modo click
         replayclickable = true;
     },
 
@@ -70,12 +69,14 @@ var pontosjs = {
         elemscore.empty();
 
 
-
+// incremeta o numero dos pontos e faz apend a imagem para aparecer pontos em forma de imagem
         var digits = pontuacaomelhor.toString().split('');
         for (var i = 0; i < digits.length; i++)
             elemscore.append("<img src='assets/font_small_" + digits[i] + ".png' alt='" + digits[i] + "'>");
     },
 
+
+    // quadro depois de morrer o passaro
     setpontuacaomenor: function () {
         var elemscore = $("#pontuacao");
         elemscore.empty();
