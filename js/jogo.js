@@ -1,59 +1,63 @@
+//variaveis para controlar o salto ou o nivel de gravidade do passaro
 var gravidade = 0.25;
 var salto = -4.6;
 
 var jogojs = {
 
 
+    //mostra o ecra do jogo
     mostrarjogo: function () {
         estadoAtual = estado.iniciarjogo;
 
-        //set the defaults (again)
+// definir variaveis de inicio
         velocidade = 0;
         posicao = 180;
         rotacao = 0;
         pontos = 0;
 
-        //update the jogador in preparation for the proximo game
+        //centra o passaro no jogo
         $("#jogador").css({
             y: 0,
             x: 0
         });
         jogadorjs.actualizarjogador($("#jogador"));
+        //atualiza
 
 
-
-        //clear out all the canoss if there are any
+// verifica se tem algum cano gerado e remove
         $(".canos").remove();
         canoss = new Array();
 
-        //make everything efeito again
+        //faz gera os efeitos
         $(".efeito").css('animation-play-state', 'running');
         $(".efeito").css('-webkit-animation-play-state', 'running');
 
-        //fade in the splash
+        //mostra o menu do tap tap para começar
 
         $("#splash").css("opacity", "1");
 
 
     },
 
+    //inicia o jogo
     iniciarjogo: function () {
         estadoAtual = estado.ecrajogo;
 
-        //fade out the splash
+        //para o splash
         $("#splash").stop();
 
+        //remove o splash tap tap
         $("#splash").css("opacity", "0");
 
-        //update the big pontos
+        //define a maior pontuaçao atravez do set
         pontosjs.setmaiorpontuacao();
 
 
 
-        //start up our loops
+        //começa o loops
         var updaterate = 17; //gravidade
         loopdojogo = setInterval(jogojs.jogoloop, updaterate);
-        loopdoscanos = setInterval(canosjs.refescarcanos, 1400);
+        loopdoscanos = setInterval(canosjs.refescarcanos, 1400); //tempo de refresh aos canos
 
         //salto depois de comecar
         jogadorjs.jogadorsaltos();
@@ -63,14 +67,14 @@ var jogojs = {
     jogoloop: function () {
         var jogador = $("#jogador");
 
-        //update the jogador speed/posicao
+        //atualiza a velocidade e gravidade
         velocidade += gravidade;
         posicao += velocidade;
 
-        //update the jogador
+        //atualiza jogador
         jogadorjs.actualizarjogador(jogador);
 
-        //create the bounding box
+        //cria passagem nos tubos
         var box = document.getElementById('jogador').getBoundingClientRect();
         var larguraOrigem = 34.0;
         var alturaOrigem = 24.0;
@@ -84,7 +88,7 @@ var jogojs = {
 
 
 
-        //did we hit the ground?
+//bateu no chao?
         if (box.bottom >= $("#imagem-baixo").offset().top) {
             jogadorjs.jogadormorto();
             return;
@@ -95,16 +99,13 @@ var jogojs = {
         if (boxtop <= (tijolo.offset().top + tijolo.height()))
             posicao = 0;
 
-        //we can't go any further without a canos
-        if (canoss[0] == null)
-            return;
 
-        //determine the bounding box of the proximo canoss inner area
+        //determina se passa ou nao no cano, area limitador do proximo
         var proximocanos = canoss[0];
         var proximocanoscima = proximocanos.children(".canos_cima");
 
         var canostop = proximocanoscima.offset().top + proximocanoscima.height();
-        var canosEsquerda = proximocanoscima.offset().left - 2; // for some reason it starts at the inner pipes offset, not the outer pipes.
+        var canosEsquerda = proximocanoscima.offset().left - 2;
         var canosDireita = canosEsquerda + canoswidth;
         var canosbaixo = canostop + canosheight;
 
@@ -124,12 +125,12 @@ var jogojs = {
         }
 
 
-        //have we passed the imminent danger?
+// comfirma que passa
         if (boxleft > canosDireita) {
-            //yes, remove it
+//remove
             canoss.splice(0, 1);
 
-            //and pontos a point
+            //ponto
             jogadorjs.jogadorpontos();
         }
     }
